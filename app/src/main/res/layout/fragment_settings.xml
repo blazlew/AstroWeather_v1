@@ -31,7 +31,7 @@
                 android:textSize="30dp" />
 
             <EditText
-                android:id="@+id/lat"
+                android:id="@+id/tvLatitude"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -44,7 +44,7 @@
                 android:textColor="@android:color/white" />
 
             <EditText
-                android:id="@+id/longi"
+                android:id="@+id/tvLongitude"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -56,7 +56,7 @@
                 android:textColor="@android:color/white" />
 
             <EditText
-                android:id="@+id/ref"
+                android:id="@+id/tvRefreshingTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
