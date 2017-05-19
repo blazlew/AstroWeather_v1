@@ -1,0 +1,82 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#000000">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/text1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="25dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="Settings"
+                android:textColor="@android:color/white"
+                android:textSize="30dp" />
+
+            <EditText
+                android:id="@+id/lat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="75dp"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="Latitude (tap here)"
+                android:inputType="textPersonName"
+                android:textColorHint="@color/colorPrimary"
+                android:textColor="@android:color/white" />
+
+            <EditText
+                android:id="@+id/longi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:textColorHint="@color/colorPrimary"
+                android:gravity="center"
+                android:hint="Longitude (tap here)"
+                android:inputType="textPersonName"
+                android:textColor="@android:color/white" />
+
+            <EditText
+                android:id="@+id/ref"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ems="10"
+                android:layout_marginTop="25dp"
+                android:textColorHint="@color/colorPrimary"
+                android:gravity="center"
+                android:hint="Refresh rate in seconds (tap here)"
+                android:inputType="textPersonName"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/okButton"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="100dp"
+                android:gravity="center"
+                android:text="CHANGE" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
