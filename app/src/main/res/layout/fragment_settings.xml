@@ -38,7 +38,7 @@
                 android:layout_marginTop="75dp"
                 android:ems="10"
                 android:gravity="center"
-                android:hint="Latitude (tap here)"
+                android:hint="Latitude"
                 android:inputType="textPersonName"
                 android:textColorHint="@color/colorPrimary"
                 android:textColor="@android:color/white" />
@@ -51,7 +51,7 @@
                 android:ems="10"
                 android:textColorHint="@color/colorPrimary"
                 android:gravity="center"
-                android:hint="Longitude (tap here)"
+                android:hint="Longitude"
                 android:inputType="textPersonName"
                 android:textColor="@android:color/white" />
 
@@ -64,7 +64,7 @@
                 android:layout_marginTop="25dp"
                 android:textColorHint="@color/colorPrimary"
                 android:gravity="center"
-                android:hint="Refresh rate in seconds (tap here)"
+                android:hint="Refresh rate in seconds"
                 android:inputType="textPersonName"
                 android:textColor="@android:color/white" />
 

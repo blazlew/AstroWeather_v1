@@ -78,11 +78,11 @@ public class MoonFragment extends Fragment {
                 Calendar.getInstance().get(Calendar.SECOND), getOffset(), timeZone.inDaylightTime(new Date()));
         AstroCalculator astroCalculator = new AstroCalculator(datetime, location);
         AstroCalculator.MoonInfo moonInfo = astroCalculator.getMoonInfo();
-        this.tvSunrise.setText("Sunrise: " + moonInfo.getMoonrise().toString());
-        this.tvSunset.setText("Sunset: " + moonInfo.getMoonset().toString());
-        this.tvNewMoon.setText("New moon: " + moonInfo.getNextNewMoon().toString());
-        this.tvFullMoon.setText("Full moon: " + moonInfo.getNextFullMoon().toString());
-        this.tvMoonPhaze.setText("Phase: " + Math.round(moonInfo.getIllumination() * 100d)/100d + "%");
+        this.tvSunrise.setText(moonInfo.getMoonrise().toString());
+        this.tvSunset.setText(moonInfo.getMoonset().toString());
+        this.tvNewMoon.setText(moonInfo.getNextNewMoon().toString());
+        this.tvFullMoon.setText(moonInfo.getNextFullMoon().toString());
+        this.tvMoonPhaze.setText(Math.round(moonInfo.getIllumination() * 100d)/100d + "%");
         try {
             Date dateOfLastNewMoon = new SimpleDateFormat("yyyy-mm-dd").parse((Integer.toString(datetime.getYear()) + "-" +
                     Integer.toString(datetime.getMonth()) + "-" + Integer.toString(datetime.getDay())));

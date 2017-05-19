@@ -68,12 +68,12 @@ public class SunFragment extends Fragment {
                 Calendar.getInstance().get(Calendar.SECOND), getOffset(), mTimeZone.inDaylightTime(new Date()));
         AstroCalculator astroCalculator = new AstroCalculator(datetime, location);
         AstroCalculator.SunInfo sunInfo = astroCalculator.getSunInfo();
-        this.tvSunrise.setText("Sunrise: " + sunInfo.getSunrise().toString());
-        this.tvSunriseAzimuth.setText("Azimuth: " + Double.toString(Math.round(sunInfo.getAzimuthRise() * 100d)/100d));
-        this.tvSunset.setText("Sunset: " + sunInfo.getSunset().toString());
-        this.tvSunsetAzimuth.setText("Azimuth: " + Double.toString(Math.round(sunInfo.getAzimuthSet() * 100d)/100d));
-        this.tvDusk.setText("Dusk: " + Integer.toString(sunInfo.getTwilightEvening().getHour()) + ":" + Integer.toString(sunInfo.getTwilightEvening().getMinute()));
-        this.tvDawn.setText("Dawn: " + Integer.toString(sunInfo.getTwilightMorning().getHour()) + ":" + Integer.toString(sunInfo.getTwilightMorning().getMinute()));
+        this.tvSunrise.setText(sunInfo.getSunrise().toString());
+        this.tvSunriseAzimuth.setText(Double.toString(Math.round(sunInfo.getAzimuthRise() * 100d)/100d));
+        this.tvSunset.setText(sunInfo.getSunset().toString());
+        this.tvSunsetAzimuth.setText(Double.toString(Math.round(sunInfo.getAzimuthSet() * 100d)/100d));
+        this.tvDusk.setText(Integer.toString(sunInfo.getTwilightEvening().getHour()) + ":" + Integer.toString(sunInfo.getTwilightEvening().getMinute()));
+        this.tvDawn.setText(Integer.toString(sunInfo.getTwilightMorning().getHour()) + ":" + Integer.toString(sunInfo.getTwilightMorning().getMinute()));
     }
 
     public int getOffset(){
