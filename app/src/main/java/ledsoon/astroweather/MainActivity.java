@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
                 return HomeFragment.newInstance();
             }
             if (position == 0) {
-                return SunFragment.newInstance(position);
+                return SunFragment.newInstance();
             }
             if (position == 2) {
                 return MoonFragment.newInstance();

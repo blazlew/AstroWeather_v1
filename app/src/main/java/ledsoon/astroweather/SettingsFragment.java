@@ -72,7 +72,7 @@ public class SettingsFragment extends Fragment {
                 if(tvLongitude.getText().toString().length() >= 1 && isNumeric(tvLongitude.getText().toString())) {
                     iDataSender.sendToActivity(MainActivity.latitude, tvLongitude.getText().toString(), MainActivity.refreshingTime);
                 }
-                Toast.makeText(getActivity(), "Data set!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Data has been changed", Toast.LENGTH_SHORT).show();
                 tvLongitude.setText("");
                 tvLatitude.setText("");
                 tvRefreshingTime.setText("");
@@ -90,7 +90,7 @@ public class SettingsFragment extends Fragment {
     {
         try
         {
-            double d = Double.parseDouble(str);
+            Double.parseDouble(str);
         }
         catch(NumberFormatException nfe)
         {

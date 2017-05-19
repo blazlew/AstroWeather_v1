@@ -19,17 +19,14 @@ import java.util.TimeZone;
 
 public class SunFragment extends Fragment {
 
-    TextView sunrise, wazymut, sunset, zazymut, zmierzch, swit;
+    TextView tvSunrise, tvSunriseAzimuth, tvSunset, tvSunsetAzimuth, tvDusk, tvDawn;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
     }
 
-    public SunFragment() {
-    }
-
-    public static SunFragment newInstance(int sectionNumber) {
+    public static SunFragment newInstance() {
         SunFragment fragment = new SunFragment();
         return fragment;
     }
@@ -37,50 +34,46 @@ public class SunFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_sun, container, false);
-        this.sunrise = (TextView) rootView.findViewById(R.id.tvSunrise);
-        this.wazymut = (TextView) rootView.findViewById(R.id.wazymut);
-        this.sunset = (TextView) rootView.findViewById(R.id.tvSunset);
-        this.zazymut = (TextView) rootView.findViewById(R.id.zazymut);
-        this.zmierzch = (TextView) rootView.findViewById(R.id.zmierzch);
-        this.swit = (TextView) rootView.findViewById(R.id.swit);
-        calculateSun();
+        this.tvSunrise = (TextView) rootView.findViewById(R.id.tvSunrise);
+        this.tvSunriseAzimuth = (TextView) rootView.findViewById(R.id.tvSunriseAzimuth);
+        this.tvSunset = (TextView) rootView.findViewById(R.id.tvSunset);
+        this.tvSunsetAzimuth = (TextView) rootView.findViewById(R.id.tvSunsetAzimuth);
+        this.tvDusk = (TextView) rootView.findViewById(R.id.tvDusk);
+        this.tvDawn = (TextView) rootView.findViewById(R.id.tvDawn);
+        generateSunInfo();
         return rootView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        calculateSun();
+        generateSunInfo();
         final Handler handler=new Handler();
         final Runnable updateTask=new Runnable() {
             @Override
             public void run() {
-                calculateSun();
+                generateSunInfo();
                 handler.postDelayed(this, Long.parseLong(MainActivity.refreshingTime) * 1000);
             }
         };
         handler.postDelayed(updateTask, Long.parseLong(MainActivity.refreshingTime) * 1000);
     }
 
-    void calculateSun() {
-        AstroCalculator.Location loc = new AstroCalculator.Location(Double.parseDouble(MainActivity.latitude), Double.parseDouble(MainActivity.longitude));
+    void generateSunInfo() {
+        AstroCalculator.Location location = new AstroCalculator.Location(Double.parseDouble(MainActivity.latitude), Double.parseDouble(MainActivity.longitude));
         Calendar mCalendar = new GregorianCalendar();
         TimeZone mTimeZone = mCalendar.getTimeZone();
         AstroDateTime datetime = new AstroDateTime(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH) + 1,
                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR), Calendar.getInstance().get(Calendar.MINUTE),
                 Calendar.getInstance().get(Calendar.SECOND), getOffset(), mTimeZone.inDaylightTime(new Date()));
-        AstroCalculator calc = new AstroCalculator(datetime, loc);
-        AstroCalculator.SunInfo sun = calc.getSunInfo();
-        this.sunrise.setText("Sunrise: " + sun.getSunrise().toString());
-        this.wazymut.setText("Azimuth: " + Double.toString(sun.getAzimuthRise()));
-        this.sunset.setText("Sunset: " + sun.getSunset().toString());
-        this.zazymut.setText("Azimuth: " + Double.toString(sun.getAzimuthSet()));
-        AstroDateTime datetime2 = sun.getTwilightEvening();
-        String temp = Integer.toString(datetime2.getHour()) + ":" + Integer.toString(datetime2.getMinute());
-        AstroDateTime datetime3 = sun.getTwilightMorning();
-        String temp2 = Integer.toString(datetime3.getHour()) + ":" + Integer.toString(datetime3.getMinute());
-        this.zmierzch.setText("Dusk: " + temp);
-        this.swit.setText("Dawn: " + temp2);
+        AstroCalculator astroCalculator = new AstroCalculator(datetime, location);
+        AstroCalculator.SunInfo sunInfo = astroCalculator.getSunInfo();
+        this.tvSunrise.setText("Sunrise: " + sunInfo.getSunrise().toString());
+        this.tvSunriseAzimuth.setText("Azimuth: " + Double.toString(Math.round(sunInfo.getAzimuthRise() * 100d)/100d));
+        this.tvSunset.setText("Sunset: " + sunInfo.getSunset().toString());
+        this.tvSunsetAzimuth.setText("Azimuth: " + Double.toString(Math.round(sunInfo.getAzimuthSet() * 100d)/100d));
+        this.tvDusk.setText("Dusk: " + Integer.toString(sunInfo.getTwilightEvening().getHour()) + ":" + Integer.toString(sunInfo.getTwilightEvening().getMinute()));
+        this.tvDawn.setText("Dawn: " + Integer.toString(sunInfo.getTwilightMorning().getHour()) + ":" + Integer.toString(sunInfo.getTwilightMorning().getMinute()));
     }
 
     public int getOffset(){

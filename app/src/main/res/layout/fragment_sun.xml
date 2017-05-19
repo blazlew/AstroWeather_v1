@@ -42,7 +42,7 @@
                 android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/wazymut"
+                android:id="@+id/tvSunriseAzimuth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -65,7 +65,7 @@
                 android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/zazymut"
+                android:id="@+id/tvSunsetAzimuth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -76,7 +76,7 @@
                 android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/zmierzch"
+                android:id="@+id/tvDusk"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -88,7 +88,7 @@
                 android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/swit"
+                android:id="@+id/tvDawn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
