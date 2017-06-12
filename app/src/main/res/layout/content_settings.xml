@@ -7,13 +7,26 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="ledsoon.astroweather.SettingsActivity">
 
-    <fragment
-        android:id="@+id/settings"
-        android:name="ledsoon.astroweather.SettingsFragment"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-        tools:layout="@layout/fragment_settings"
-        />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <fragment
+            android:id="@+id/settings"
+            android:name="ledsoon.astroweather.SettingsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            tools:layout="@layout/fragment_settings" />
+
+        <fragment
+            android:id="@+id/favourites"
+            android:name="ledsoon.astroweather.FavouritesFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:layout="@layout/fragment_favourites" />
+    </LinearLayout>
 
 </RelativeLayout>

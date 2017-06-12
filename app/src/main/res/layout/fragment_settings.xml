@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="0dp"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:text="Settings"
@@ -35,12 +35,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="75dp"
+                android:layout_marginTop="20dp"
                 android:ems="10"
                 android:gravity="center"
                 android:hint="Latitude"
                 android:inputType="textPersonName"
-                android:textColorHint="@color/colorPrimary"
                 android:textColor="@android:color/white" />
 
             <EditText
@@ -49,7 +48,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:ems="10"
-                android:textColorHint="@color/colorPrimary"
                 android:gravity="center"
                 android:hint="Longitude"
                 android:inputType="textPersonName"
@@ -62,7 +60,6 @@
                 android:layout_gravity="center"
                 android:ems="10"
                 android:layout_marginTop="25dp"
-                android:textColorHint="@color/colorPrimary"
                 android:gravity="center"
                 android:hint="Refresh rate in seconds"
                 android:inputType="textPersonName"
@@ -73,7 +70,7 @@
                 android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="25dp"
                 android:gravity="center"
                 android:text="CHANGE" />
         </LinearLayout>
