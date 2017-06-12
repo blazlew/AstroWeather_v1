@@ -21,6 +21,13 @@ public class FavouritesFragment extends Fragment implements SettingsFragment.IDa
         MainActivity.refreshingTime = c;
     }
 
+    public interface favouritesDataListener{
+        public void sendFavouritesData(String city, String latitude, String longitude, String time, String temperature, String pressure,
+                                       String weatherConditions, String windStrenth, String windDirection, String humidity, String visibility, String iconURL);
+    }
+
+    favouritesDataListener listener;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

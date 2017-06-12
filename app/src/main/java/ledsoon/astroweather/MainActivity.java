@@ -118,17 +118,15 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
             if (position == 2) {
                 return MoonFragment.newInstance();
             }
+            if (position == 3) {
+                return WeatherFragment.newInstance();
+            }
             return null;
         }
 
         @Override
         public int getCount() {
-            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && MainActivity.isTablet) {
-                return 3;
-            }
-            else {
-                return 3;
-            }
+            return 4;
         }
 
         @Override
