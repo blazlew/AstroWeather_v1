@@ -121,12 +121,15 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
             if (position == 3) {
                 return WeatherFragment.newInstance();
             }
+            if (position == 4) {
+                return ForecastFragment.newInstance();
+            }
             return null;
         }
 
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
 
         @Override
