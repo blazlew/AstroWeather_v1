@@ -10,12 +10,29 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment{
 
     private Button bChange;
     private TextView tvLatitude;
     private TextView tvLongitude;
     private TextView tvRefreshingTime;
+
+  //  @Override
+    public void sendFavouritesData(String city, String latitude, String longitude, String time, String temperature, String pressure, String weatherConditions, String windStrenth, String windDirection, String humidity, String visibility, String iconURL, String forecast) {
+        MainActivity.city = city;
+        MainActivity.lat = latitude;
+        MainActivity.longi = longitude;
+        //MainActivity.time = time;
+        MainActivity.temp = temperature;
+        MainActivity.pres = pressure;
+        MainActivity.desc = weatherConditions;
+        MainActivity.windStr = windStrenth;
+        MainActivity.windDir = windDirection;
+        MainActivity.hum = humidity;
+        MainActivity.vis = visibility;
+        MainActivity.imgUrl = iconURL;
+        MainActivity.forecast = forecast;
+    }
 
     public interface IDataSender {
         void sendToActivity(String a, String b, String c);

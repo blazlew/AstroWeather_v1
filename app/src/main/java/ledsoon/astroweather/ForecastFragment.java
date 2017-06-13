@@ -31,4 +31,10 @@ public class ForecastFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        tvForecast.setText(MainActivity.forecast);
+    }
+
 }

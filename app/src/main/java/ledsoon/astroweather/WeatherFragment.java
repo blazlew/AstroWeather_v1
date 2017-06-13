@@ -1,13 +1,20 @@
 package ledsoon.astroweather;
 
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 /**
@@ -27,6 +34,7 @@ public class WeatherFragment extends Fragment {
     TextView tvHumidity;
     TextView tvVisibility;
     ImageView ivWeatherConditions;
+    Bitmap bmp;
 
 
 
@@ -55,6 +63,45 @@ public class WeatherFragment extends Fragment {
         ivWeatherConditions = (ImageView) rootView.findViewById(R.id.ivWeatherCondtions);
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        tvCity.setText(MainActivity.city);
+        tvTemperature.setText(MainActivity.temp + MainActivity.unit);
+        tvWeatherConditions.setText(MainActivity.desc);
+        tvPressure.setText(MainActivity.pres + " mb");
+        tvHumidity.setText(MainActivity.hum);
+        tvVisibility.setText(MainActivity.vis);
+        tvWindStrength.setText(MainActivity.windStr + " km/h");
+        tvWindDirection.setText(MainActivity.windDir);
+        tvLatitude.setText(MainActivity.lat);
+        tvLongitude.setText(MainActivity.longi);
+        final Handler handler = new Handler();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                URL url = null;
+                try {
+                    url = new URL(MainActivity.imgUrl);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if (url != null) bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ivWeatherConditions.setImageBitmap(bmp);
     }
 
 }
