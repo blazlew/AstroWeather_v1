@@ -69,7 +69,8 @@ public class WeatherFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         tvCity.setText(MainActivity.city);
-        tvTemperature.setText(MainActivity.temp + MainActivity.unit);
+        tvTime.setText(MainActivity.time);
+        tvTemperature.setText(MainActivity.temp + " °C");
         tvWeatherConditions.setText(MainActivity.desc);
         tvPressure.setText(MainActivity.pres + " mb");
         tvHumidity.setText(MainActivity.hum);

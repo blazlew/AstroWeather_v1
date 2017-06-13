@@ -40,19 +40,18 @@ public class FavouritesFragment extends Fragment implements SettingsFragment.IDa
 
     EditText etLocalization;
     Button bPlus;
-    ListView lvPlaces;
 
 //    String XML_URL, concatedPlace;
 //    ArrayList<String> arrayXML = new ArrayList<>(), placesList = new ArrayList<>();
 //    ArrayAdapter<String> arrayAdapter;
 //    boolean bFlag = true;
 
-    ListView list;
-    ArrayList<String> listItems = new ArrayList<String>(), parsedXML = new ArrayList<String>();
+    ListView lvPlaces;
+    ArrayList<String> placesList = new ArrayList<String>(), arrayXML = new ArrayList<String>();
     ArrayAdapter<String> adapter;
-    String query, concat;
-    boolean flag = true;
-    private String location2;
+    String query, concatedPlace;
+    boolean bFlag = true;
+    private String typedPlace;
 
     @Override
     public void sendToActivity(String a, String b, String c) {
@@ -135,36 +134,35 @@ public class FavouritesFragment extends Fragment implements SettingsFragment.IDa
         bPlus.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                location2 = etLocalization.getText().toString();
+                typedPlace = etLocalization.getText().toString();
                 etLocalization.setText("");
-                query = "https://query.yahooapis.com/v1/public/yql?q=select * from geo.places(1) where text=" + '"' + location2 + '"';
-                query = query.replaceAll(" ", "%20");
+                query = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20geo.places(1)%20where%20text=" + '"' + typedPlace + '"';
                 Thread thread = new Thread(new Runnable() {
 
                     @Override
                     public void run() {
                         try {
-                            parsedXML.clear();
+                            arrayXML.clear();
                             URL url = new URL(query);
-                            URLConnection conn = url.openConnection();
+                            URLConnection urlConnection = url.openConnection();
 
-                            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                            DocumentBuilder builder = factory.newDocumentBuilder();
-                            Document doc = builder.parse(conn.getInputStream());
+                            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+                            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+                            Document document = documentBuilder.parse(urlConnection.getInputStream());
 
-                            NodeList nodes = doc.getElementsByTagName("place");
-                            for (int i = 0; i < nodes.getLength(); i++) {
-                                Element element = (Element) nodes.item(i);
+                            NodeList nodeList = document.getElementsByTagName("place");
+                            for (int i = 0; i < nodeList.getLength(); i++) {
+                                Element element = (Element) nodeList.item(i);
                                 NodeList title = element.getElementsByTagName("woeid");
                                 Element line = (Element) title.item(0);
-                                parsedXML.add(line.getTextContent());
+                                arrayXML.add(line.getTextContent());
                             }
-                            concat = location2 + "/" + parsedXML.get(0);
+                            concatedPlace = typedPlace + "/" + arrayXML.get(0);
                             MainActivity.sqLiteDatabase.execSQL("INSERT INTO "
                                     + MainActivity.TableName
                                     + " (Field1, Field2)"
-                                    + " VALUES ('" + location2 + "', " + parsedXML.get(0) + ");");
-                            listItems.add(concat);
+                                    + " VALUES ('" + typedPlace + "', " + arrayXML.get(0) + ");");
+                            placesList.add(concatedPlace);
                             getFiles();
                         } catch (UnknownHostException e) {
                             toast(getContext(), "No internet connection, can't add!");
@@ -241,8 +239,8 @@ public class FavouritesFragment extends Fragment implements SettingsFragment.IDa
                     do {
                         try {
                             PrintWriter out = new PrintWriter(MainActivity.dir + "/" + Integer.toString(c.getInt(Column2)) + ".xml");
-                            query = "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid=" + Integer.toString(c.getInt(Column2)) + " and u=" + MainActivity.unit + ";";
-                            query = query.replaceAll(" ", "%20");
+                            query = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid=" + Integer.toString(c.getInt(Column2)) + " and u=" + MainActivity.unit + ";";
+                            //query = query.replaceAll(" ", "%20");
                             URL url = new URL(query);
                             BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
                             String str;
@@ -491,7 +489,7 @@ public class FavouritesFragment extends Fragment implements SettingsFragment.IDa
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (flag) {
+        if (bFlag) {
         /*retrieve data from database */
             Cursor c = MainActivity.sqLiteDatabase.rawQuery("SELECT * FROM " + MainActivity.TableName, null);
 
@@ -504,18 +502,18 @@ public class FavouritesFragment extends Fragment implements SettingsFragment.IDa
                 // Loop through all Results
                 do {
                     try {
-                        listItems.add(c.getString(Column1) + '/' + Integer.toString(c.getInt(Column2)));
+                        placesList.add(c.getString(Column1) + '/' + Integer.toString(c.getInt(Column2)));
                     } catch (Exception e) {
                     }
 
                 } while (c.moveToNext());
             }
-            flag = false;
+            bFlag = false;
         }
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, listItems);
-        list = (ListView) getActivity().findViewById(R.id.lvPlaces);
-        list.setAdapter(adapter);
-        list.setOnTouchListener(new View.OnTouchListener() {
+        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, placesList);
+        lvPlaces = (ListView) getActivity().findViewById(R.id.lvPlaces);
+        lvPlaces.setAdapter(adapter);
+        lvPlaces.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 try {
                     v.getParent().requestDisallowInterceptTouchEvent(shouldRequestDisallowIntercept((ViewGroup) v, event));
@@ -534,24 +532,24 @@ public class FavouritesFragment extends Fragment implements SettingsFragment.IDa
         };
         handler.postDelayed(updateTask, 1000);
 
-        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lvPlaces.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long arg3) {
                 MainActivity.sqLiteDatabase.execSQL("DELETE FROM "
                         + MainActivity.TableName
-                        + " WHERE Field1=" + "'" + listItems.get(position).substring(0, listItems.get(position).indexOf('/')) + "';");
-                File file = new File(MainActivity.dir + "/" + listItems.get(position).substring(listItems.get(position).indexOf('/'), listItems.get(position).length()) + ".xml");
+                        + " WHERE Field1=" + "'" + placesList.get(position).substring(0, placesList.get(position).indexOf('/')) + "';");
+                File file = new File(MainActivity.dir + "/" + placesList.get(position).substring(placesList.get(position).indexOf('/'), placesList.get(position).length()) + ".xml");
                 file.delete();
-                listItems.remove(position);
+                placesList.remove(position);
                 adapter.notifyDataSetChanged();
                 return false;
             }
 
         });
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lvPlaces.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -561,41 +559,42 @@ public class FavouritesFragment extends Fragment implements SettingsFragment.IDa
                     @Override
                     public void run() {
                         try {
-                            parsedXML.clear();
-                            String path = MainActivity.dir + "/" + listItems.get(position).substring(listItems.get(position).indexOf('/'), listItems.get(position).length()) + ".xml";
+                            arrayXML.clear();
+                            String path = MainActivity.dir + "/" + placesList.get(position).substring(placesList.get(position).indexOf('/'), placesList.get(position).length()) + ".xml";
                             FileReader filePath = new FileReader(path);
                             BufferedReader buffer = new BufferedReader(filePath);
                             String currentLine;
-                            String city = listItems.get(position).substring(0, listItems.get(position).indexOf('/'));
+                            String city = placesList.get(position).substring(0, placesList.get(position).indexOf('/'));
                             city.replaceAll(" ", "%20");
-                            String lat = null, longi  = null,
-                                    temp = null, desc = null,
-                                    pres = null, hum = null,
-                                    vis = null, windStr = null,
-                                    windDir = null, imgUrl = null, forecast = null, forecast2 = null, forecast3 = null, forecast4 = null,
+                            String latitude = null, longitude  = null, time = null,
+                                    temperature = null, weatherConditions = null,
+                                    pressure = null, humidity = null,
+                                    visibility = null, windStrength = null,
+                                    windDirection = null, iconURL = null, forecast = null, forecast2 = null, forecast3 = null, forecast4 = null,
                                     forecast5 = null, forecast6 = null, forecast7 = null;
                             while((currentLine = buffer.readLine()) != null) {
                                 if (currentLine.contains("geo:lat")) {
-                                    lat = currentLine.substring(currentLine.indexOf("pos#") + 6, currentLine.indexOf("</geo:lat>"));
+                                    latitude = currentLine.substring(currentLine.indexOf("pos#") + 6, currentLine.indexOf("</geo:lat>"));
                                 }
                                 if (currentLine.contains("geo:long")) {
-                                    longi = currentLine.substring(currentLine.lastIndexOf("pos#") + 6, currentLine.indexOf("</geo:long>"));
+                                    longitude = currentLine.substring(currentLine.lastIndexOf("pos#") + 6, currentLine.indexOf("</geo:long>"));
                                 }
                                 if (currentLine.contains("yweather:condition")) {
-                                    temp = currentLine.substring(currentLine.indexOf("temp=") + 6, currentLine.indexOf("text=") - 2);
-                                    desc = currentLine.substring(currentLine.indexOf("text=") + 6, currentLine.indexOf("/><yweather:forecast", currentLine.indexOf("text=") + 6) - 1);
+                                    time = currentLine.substring(currentLine.indexOf("date=") + 23, currentLine.indexOf("temp=") - 7);
+                                    temperature = currentLine.substring(currentLine.indexOf("temp=") + 6, currentLine.indexOf("text=") - 2);
+                                    weatherConditions = currentLine.substring(currentLine.indexOf("text=") + 6, currentLine.indexOf("/><yweather:forecast", currentLine.indexOf("text=") + 6) - 1);
                                 }
                                 if (currentLine.contains("<yweather:atmosphere")) {
-                                    pres = currentLine.substring(currentLine.lastIndexOf("pressure=") + 10, currentLine.indexOf("rising=") - 2);
-                                    hum = currentLine.substring(currentLine.indexOf("humidity=") + 10, currentLine.lastIndexOf("pressure=") - 2);
-                                    vis = currentLine.substring(currentLine.indexOf("visibility=") + 12, currentLine.indexOf("<yweather:astronomy", currentLine.indexOf("visibility=") + 12) - 3);
+                                    pressure = currentLine.substring(currentLine.lastIndexOf("pressure=") + 10, currentLine.indexOf("rising=") - 2);
+                                    humidity = currentLine.substring(currentLine.indexOf("humidity=") + 10, currentLine.lastIndexOf("pressure=") - 2);
+                                    visibility = currentLine.substring(currentLine.indexOf("visibility=") + 12, currentLine.indexOf("<yweather:astronomy", currentLine.indexOf("visibility=") + 12) - 3);
                                 }
                                 if (currentLine.contains("<yweather:wind")) {
-                                    windDir = currentLine.substring(currentLine.indexOf("direction=") + 11, currentLine.lastIndexOf("speed=") - 2);
-                                    windStr = currentLine.substring(currentLine.lastIndexOf("speed=") + 7, currentLine.indexOf("<yweather:atmosphere", currentLine.lastIndexOf("speed=") + 7) - 3);
+                                    windDirection = currentLine.substring(currentLine.indexOf("direction=") + 11, currentLine.lastIndexOf("speed=") - 2);
+                                    windStrength = currentLine.substring(currentLine.lastIndexOf("speed=") + 7, currentLine.indexOf("<yweather:atmosphere", currentLine.lastIndexOf("speed=") + 7) - 3);
                                 }
                                 if (currentLine.contains("CDATA")) {
-                                    imgUrl = currentLine.substring(currentLine.indexOf("CDATA") + 19, currentLine.lastIndexOf(".gif") + 4);
+                                    iconURL = currentLine.substring(currentLine.indexOf("CDATA") + 19, currentLine.lastIndexOf(".gif") + 4);
                                 }
                                 if (currentLine.contains("<yweather:forecast")) {
                                     forecast = currentLine.substring(currentLine.indexOf("<yweather:forecast xmlns:yweather=") + 86, currentLine.indexOf("/>", currentLine.indexOf("<yweather:forecast xmlns:yweather=") + 1));
@@ -620,8 +619,8 @@ public class FavouritesFragment extends Fragment implements SettingsFragment.IDa
                                 }
                             }
                             filePath.close();
-                            listener.sendFavouritesData(city, lat, longi, "", temp, pres, desc, windStr, windDir, hum, vis, imgUrl, forecast);
-                            sendToActivity(lat, longi, "1");
+                            listener.sendFavouritesData(city, latitude, longitude, time, temperature, pressure, weatherConditions, windStrength, windDirection, humidity, visibility, iconURL, forecast);
+                            sendToActivity(latitude, longitude, "1");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
     public static String longitude = "51.47";
     public static String refreshingTime = "1";
     static FragmentManager fragmentManager;
-    public static boolean isTablet = false, network;
+    public static boolean isTablet = false, networkAvailable;
     public static SQLiteDatabase sqLiteDatabase;
     public static String TableName = "woeids", dir, unit = "'c'";
 //    String query;
@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
         final Runnable updateTask=new Runnable() {
             @Override
             public void run() {
-                if(isNetworkAvailable(getApplicationContext())) network = true;
-                else network = false;
+                if(isNetworkAvailable(getApplicationContext())) networkAvailable = true;
+                else networkAvailable = false;
                 handler.postDelayed(this, 1000);
             }
         };
@@ -204,23 +204,23 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
             @Override
             public void run() {
                 /*retrieve data from database */
-                Cursor c = MainActivity.sqLiteDatabase.rawQuery("SELECT * FROM " + MainActivity.TableName, null);
+                Cursor cursor = MainActivity.sqLiteDatabase.rawQuery("SELECT * FROM " + MainActivity.TableName, null);
 
-                int Column1 = c.getColumnIndex("Field1");
-                int Column2 = c.getColumnIndex("Field2");
+                int columnOne = cursor.getColumnIndex("Field1");
+                int columnTwo = cursor.getColumnIndex("Field2");
 
                 // Check if our result was valid.
-                c.moveToFirst();
-                if (c != null) {
+                cursor.moveToFirst();
+                if (cursor != null) {
                     // Loop through all Results
                     do {
                         try {
-                            query = "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid=" + Integer.toString(c.getInt(Column2)) + " and u=" + unit + ";";
+                            query = "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid=" + Integer.toString(cursor.getInt(columnTwo)) + " and u=" + unit + ";";
                             query = query.replaceAll(" ", "%20");
                             URL url = new URL(query);
-                            String dir2 = dir + "/" + Integer.toString(c.getInt(Column2)) + ".xml";
+                            String secondDir = dir + "/" + Integer.toString(cursor.getInt(columnTwo)) + ".xml";
                             BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-                            PrintWriter out = new PrintWriter(dir2);
+                            PrintWriter out = new PrintWriter(secondDir);
                             String str;
                             while ((str = in.readLine()) != null) {
                                 out.println(str);
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
                             e.printStackTrace();
                         }
 
-                    } while (c.moveToNext());
+                    } while (cursor.moveToNext());
                 }
             }
         });
@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
         this.city = city;
         this.lat = latitude;
         this.longi = longitude;
-        //this.time = time;
+        this.time = time;
         this.temp = temperature;
         this.pres = pressure;
         this.desc = weatherConditions;

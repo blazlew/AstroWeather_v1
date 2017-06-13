@@ -26,7 +26,7 @@ public class SettingsActivity extends AppCompatActivity implements SettingsFragm
         MainActivity.city = city;
         MainActivity.lat = latitude;
         MainActivity.longi = longitude;
-        //MainActivity.time = time;
+        MainActivity.time = time;
         MainActivity.temp = temperature;
         MainActivity.pres = pressure;
         MainActivity.desc = weatherConditions;
